@@ -34,6 +34,7 @@ final class AutoClickSimulator: ObservableObject {
     private var isDown: Bool = true
     private var leftCells: Int = DEFAULT_LEFT_CELLS
     private var rightCells: Int = DEFAULT_RIGHT_CELLS
+    private var isZoomOut: Bool = true
 
     private var timer: Timer?
     private var mouseLocation: NSPoint { NSEvent.mouseLocation }
@@ -78,6 +79,7 @@ final class AutoClickSimulator: ObservableObject {
         self.isDown = true
         self.leftCells = Defaults[.autoClickerState].leftCells
         self.rightCells = Defaults[.autoClickerState].rightCells
+        self.isZoomOut = Defaults[.autoClickerState].isZoomOut
 
         self.finalClickAt = .init(timeInterval: self.duration.asTimeInterval(interval: self.interval * self.remainingInterations), since: .init())
 
@@ -144,18 +146,28 @@ final class AutoClickSimulator: ObservableObject {
         self.iter += 1
         self.pressSow(mouseX: self.nextX, mouseY: self.nextY)
 
+        let dx: CGFloat
+        let dy: CGFloat
+        if self.isZoomOut {
+            dx = CGFloat(MOUSE_DX) * 0.5
+            dy = CGFloat(MOUSE_DY) * 0.5
+        }
+        else {
+            dx = CGFloat(MOUSE_DX)
+            dy = CGFloat(MOUSE_DY)
+        }
         if self.iter % leftCells == 0 {
-            self.nextX += CGFloat(MOUSE_DX)
-            self.nextY += CGFloat(MOUSE_DY)
+            self.nextX += dx
+            self.nextY += dy
             self.isDown = !self.isDown
         }
         else if self.isDown {
-            self.nextX += CGFloat(-MOUSE_DX)
-            self.nextY += CGFloat(MOUSE_DY)
+            self.nextX += -dx
+            self.nextY += dy
         }
         else {
-            self.nextX += CGFloat(MOUSE_DX)
-            self.nextY += CGFloat(-MOUSE_DY)
+            self.nextX += dx
+            self.nextY += -dy
         }
         
         self.nextClickAt = .init(timeInterval: self.duration.asTimeInterval(interval: self.interval), since: .init())

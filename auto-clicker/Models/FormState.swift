@@ -16,6 +16,7 @@ struct FormState: Codable, Defaults.Serializable {
     var repeatAmount: Int
     var leftCells: Int
     var rightCells: Int
+    var isZoomOut: Bool
 }
 
 extension FormState {
@@ -28,5 +29,6 @@ extension FormState {
         self.repeatAmount = DEFAULT_REPEAT_AMOUNT
         self.leftCells = DEFAULT_LEFT_CELLS
         self.rightCells = DEFAULT_RIGHT_CELLS
+        self.isZoomOut = true
     }
 }

@@ -26,6 +26,7 @@
 "main_window_repo_vanity"             = "with ♥️ by Othyn";
 "main_window_left"                    = "Left";
 "main_window_right"                   = "Right";
+"main_window_zoom_out"                = "Zoom out";
 
 "duration_milliseconds"        = "Millisecond(s)";
 "duration_seconds"             = "Second(s)";

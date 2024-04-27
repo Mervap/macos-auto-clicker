@@ -159,6 +159,9 @@ struct MainView: View {
                                             max: MAX_CELLS,
                                             number: self.$formState.rightCells)
                         .disabled(self.hasStarted)
+                    
+                    Toggle("main_window_zoom_out", isOn: self.$formState.isZoomOut)
+                        .toggleStyle(SwitchToggleStyle())
                 }
             }
             .padding(.top, 20)

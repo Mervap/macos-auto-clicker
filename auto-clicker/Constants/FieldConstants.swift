@@ -46,4 +46,4 @@ let MOUSE_DY: Int = 27
 let DEFAULT_LEFT_CELLS = 8
 let DEFAULT_RIGHT_CELLS = 2
 let MIN_CELLS: Int = 0
-let MAX_CELLS: Int = 32
+let MAX_CELLS: Int = 64
