@@ -30,6 +30,10 @@ struct DynamicWidthNumberField: View {
                                       newString: newRawString,
                                       newIntString: newRawStringNumeric)
 
+        if newRawString.isEmpty {
+            return
+        }
+        
         // Guard that the new value contains numeric characters only
         // Guard that the new value numeric only string is int cast successfully (should never fail anyway)
         // Else set the string to the last valid numerical value
