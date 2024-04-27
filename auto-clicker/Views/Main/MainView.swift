@@ -43,6 +43,13 @@ struct MainView: View {
             MenuBarService.changeImageColour(newColor: .systemOrange)
         }
     }
+    
+    func sow() {
+        if !self.hasStarted {
+            self.delayTimer.start(onFinish: self.autoClickSimulator.sow)
+            MenuBarService.changeImageColour(newColor: .systemOrange)
+        }
+    }
 
     func stop() {
         self.delayTimer.stop()
@@ -52,6 +59,10 @@ struct MainView: View {
     func registerKeyboardShortcuts() {
         KeyboardShortcuts.onKeyUp(for: .pressStartButton) { [self] in
             self.start()
+        }
+        
+        KeyboardShortcuts.onKeyUp(for: .pressSowButton) { [self] in
+            self.sow()
         }
 
         KeyboardShortcuts.onKeyUp(for: .pressStopButton) { [self] in
@@ -130,6 +141,24 @@ struct MainView: View {
                         .disabled(self.hasStarted)
 
                     Text(self.formState.startDelay == 1 ? "main_window_second" : "main_window_seconds", comment: "Main window 'second(s)'") + Text("main_window_before_starting", comment: "Main window 'before starting'") + Text("main_window_full_stop", comment: "Main window full stop")
+                }
+                
+                ActionStageLine {
+                    Text("main_window_left", comment: "Main window 'Left'")
+
+                    DynamicWidthNumberField(text: "",
+                                            min: MIN_CELLS,
+                                            max: MAX_CELLS,
+                                            number: self.$formState.leftCells)
+                        .disabled(self.hasStarted)
+                    
+                    Text("main_window_right", comment: "Main window 'Right'")
+
+                    DynamicWidthNumberField(text: "",
+                                            min: MIN_CELLS,
+                                            max: MAX_CELLS,
+                                            number: self.$formState.rightCells)
+                        .disabled(self.hasStarted)
                 }
             }
             .padding(.top, 20)

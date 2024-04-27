@@ -27,16 +27,35 @@ final class AutoClickSimulator: ObservableObject {
     private var interval: Int = DEFAULT_PRESS_INTERVAL
     private var amountOfPresses: Int = DEFAULT_REPEAT_AMOUNT
     private var input = Input()
+    
+    private var nextX: CGFloat = CGFloat.zero
+    private var nextY: CGFloat = CGFloat.zero
+    private var iter: Int = 0
+    private var isDown: Bool = true
+    private var leftCells: Int = DEFAULT_LEFT_CELLS
+    private var rightCells: Int = DEFAULT_RIGHT_CELLS
 
     private var timer: Timer?
     private var mouseLocation: NSPoint { NSEvent.mouseLocation }
     private var activity: Cancellable?
 
     func start() {
+        startTimer(selector: #selector(self.tick))
+    }
+    
+    func sow() {
+        startTimer(selector: #selector(self.sowTick))
+    }
+    
+    private func startTimer(selector: Selector) {
         self.isAutoClicking = true
 
         if let startMenuItem = MenuBarService.startMenuItem {
             startMenuItem.isEnabled = false
+        }
+        
+        if let rectMenuItem = MenuBarService.sowMenuItem {
+            rectMenuItem.isEnabled = false
         }
 
         if let stopMenuItem = MenuBarService.stopMenuItem {
@@ -52,6 +71,13 @@ final class AutoClickSimulator: ObservableObject {
         self.input = Defaults[.autoClickerState].pressInput
         self.amountOfPresses = Defaults[.autoClickerState].pressAmount
         self.remainingInterations = Defaults[.autoClickerState].repeatAmount
+        
+        self.nextX = self.mouseLocation.x
+        self.nextY = NSScreen.main!.frame.height - self.mouseLocation.y
+        self.iter = 0
+        self.isDown = true
+        self.leftCells = Defaults[.autoClickerState].leftCells
+        self.rightCells = Defaults[.autoClickerState].rightCells
 
         self.finalClickAt = .init(timeInterval: self.duration.asTimeInterval(interval: self.interval * self.remainingInterations), since: .init())
 
@@ -59,7 +85,7 @@ final class AutoClickSimulator: ObservableObject {
         self.nextClickAt = .init(timeInterval: timeInterval, since: .init())
         self.timer = Timer.scheduledTimer(timeInterval: timeInterval,
                                           target: self,
-                                          selector: #selector(self.tick),
+                                          selector: selector,
                                           userInfo: nil,
                                           repeats: true)
 
@@ -77,6 +103,10 @@ final class AutoClickSimulator: ObservableObject {
 
         if let startMenuItem = MenuBarService.startMenuItem {
             startMenuItem.isEnabled = true
+        }
+        
+        if let rectMenuItem = MenuBarService.sowMenuItem {
+            rectMenuItem.isEnabled = true
         }
 
         if let stopMenuItem = MenuBarService.stopMenuItem {
@@ -106,6 +136,31 @@ final class AutoClickSimulator: ObservableObject {
         self.nextClickAt = .init(timeInterval: self.duration.asTimeInterval(interval: self.interval), since: .init())
 
         if self.remainingInterations <= 0 {
+            self.stop()
+        }
+    }
+    
+    @objc private func sowTick() {
+        self.iter += 1
+        self.pressSow(mouseX: self.nextX, mouseY: self.nextY)
+
+        if self.iter % leftCells == 0 {
+            self.nextX += CGFloat(MOUSE_DX)
+            self.nextY += CGFloat(MOUSE_DY)
+            self.isDown = !self.isDown
+        }
+        else if self.isDown {
+            self.nextX += CGFloat(-MOUSE_DX)
+            self.nextY += CGFloat(MOUSE_DY)
+        }
+        else {
+            self.nextX += CGFloat(MOUSE_DX)
+            self.nextY += CGFloat(-MOUSE_DY)
+        }
+        
+        self.nextClickAt = .init(timeInterval: self.duration.asTimeInterval(interval: self.interval), since: .init())
+
+        if self.iter >= self.leftCells * self.rightCells {
             self.stop()
         }
     }
@@ -210,5 +265,33 @@ final class AutoClickSimulator: ObservableObject {
 
             completedPressesThisAction += 1
         }
+    }
+    
+    private func pressSow(mouseX: CGFloat, mouseY: CGFloat) {
+        let source: CGEventSource? = CGEventSource(stateID: .hidSystemState)
+        let clickingAtPoint = CGPoint(x: mouseX, y: mouseY)
+
+        let mouseDownType: CGEventType = .leftMouseDown
+        let mouseUpType: CGEventType = .leftMouseUp
+        let mouseButton: CGMouseButton = .left
+        
+        let mouseMoved = CGEvent(mouseEventSource: source,
+                                 mouseType: .mouseMoved,
+                                 mouseCursorPosition: clickingAtPoint,
+                                 mouseButton: mouseButton)
+
+        let mouseDown = CGEvent(mouseEventSource: source,
+                                mouseType: mouseDownType,
+                                mouseCursorPosition: clickingAtPoint,
+                                mouseButton: mouseButton)
+
+        let mouseUp = CGEvent(mouseEventSource: source,
+                              mouseType: mouseUpType,
+                              mouseCursorPosition: clickingAtPoint,
+                              mouseButton: mouseButton)
+
+        mouseMoved!.post(tap: .cghidEventTap)
+        mouseDown!.post(tap: .cghidEventTap)
+        mouseUp!.post(tap: .cghidEventTap)
     }
 }

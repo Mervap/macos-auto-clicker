@@ -24,6 +24,8 @@
 "main_window_stat_box_next_press_at"  = "NEXT PRESS AT";
 "main_window_stat_box_final_press_at" = "FINAL PRESS AT";
 "main_window_repo_vanity"             = "with ♥️ by Othyn";
+"main_window_left"                    = "Left";
+"main_window_right"                   = "Right";
 
 "duration_milliseconds"        = "Millisecond(s)";
 "duration_seconds"             = "Second(s)";
@@ -60,6 +62,7 @@
 
 "settings_keyboard_shortcuts_title" = "Global";
 "settings_keyboard_shortcuts_start" = "Start auto clicker";
+"settings_keyboard_shortcuts_sow"   = "Sow auto clicker";
 "settings_keyboard_shortcuts_stop"  = "Stop auto clicker";
 "settings_keyboard_shortcuts_help"  = "Global shortcuts to start and stop the auto click functionality.";
 
@@ -76,6 +79,7 @@
 "help_commands_report_a_bug"      = "Report a problem...";
 
 "menu_bar_item_start"            = "Start now";
+"menu_bar_item_sow"              = "Sow now";
 "menu_bar_item_stop"             = "Stop now";
 "menu_bar_item_hide_show_show"   = "Show";
 "menu_bar_item_hide_show_hide"   = "Hide";

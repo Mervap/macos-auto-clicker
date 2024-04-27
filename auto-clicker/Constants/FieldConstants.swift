@@ -36,3 +36,14 @@ let MIN_START_DELAY: Int = 0
 let MAX_START_DELAY: Int = 100_000_000
 
 let DEFAULT_START_DELAY: Int = 1
+
+// MARK: - Mouse coord diffs
+let MOUSE_DX: Int = 54
+let MOUSE_DY: Int = 27
+
+// MARK: - Cells
+
+let DEFAULT_LEFT_CELLS = 8
+let DEFAULT_RIGHT_CELLS = 2
+let MIN_CELLS: Int = 0
+let MAX_CELLS: Int = 32

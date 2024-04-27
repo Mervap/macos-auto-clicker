@@ -22,6 +22,15 @@ struct KeyboardShortcutsSettingsTabView: View {
                         MenuBarService.refreshState()
                     }
                 )
+                
+                KeyboardShortcuts.Recorder(
+                    String(format: NSLocalizedString("settings_keyboard_shortcuts_sow", comment: "Settings Keyboard Shortcut to Sow the auto clicker")),
+                    name: .pressSowButton,
+                    onChange: { _ in
+                        MenuBarService.refreshState()
+                    }
+                )
+
 
                 KeyboardShortcuts.Recorder(
                     String(format: NSLocalizedString("settings_keyboard_shortcuts_stop", comment: "Settings Keyboard Shortcut to Stop the auto clicker")),

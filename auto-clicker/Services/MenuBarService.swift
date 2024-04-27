@@ -26,6 +26,7 @@ final class MenuBarService {
     static var statusBarPopover: NSPopover?
 
     static var startMenuItem: NSMenuItem?
+    static var sowMenuItem: NSMenuItem?
     static var stopMenuItem: NSMenuItem?
     static var hideOrShowMenuItem: NSMenuItem?
     static var preferencesMenuItem: NSMenuItem?
@@ -68,6 +69,14 @@ final class MenuBarService {
         )
         self.startMenuItem!.target = self
         menu.addItem(self.startMenuItem!)
+        
+        self.sowMenuItem = NSMenuItem(
+            title: NSLocalizedString("menu_bar_item_sow", comment: "Menu bar item sow option"),
+            action: #selector(menuActionSow),
+            keyEquivalent: KeyboardShortcuts.Name.pressSowButton.shortcut?.descriptionKeyOnly.lowercased() ?? ""
+        )
+        self.sowMenuItem!.target = self
+        menu.addItem(self.sowMenuItem!)
 
         self.stopMenuItem = NSMenuItem(
             title: NSLocalizedString("menu_bar_item_stop", comment: "Menu bar item stop option"),
@@ -251,6 +260,10 @@ final class MenuBarService {
 
     @objc static func menuActionStart(sender: NSMenuItem) {
         AutoClickSimulator.shared.start()
+    }
+    
+    @objc static func menuActionSow(sender: NSMenuItem) {
+        AutoClickSimulator.shared.sow()
     }
 
     @objc static func menuActionStop(sender: NSMenuItem) {
