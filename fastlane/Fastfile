@@ -89,7 +89,7 @@ def build_and_zip(tag_prefix, is_beta)
     format: 'markdown',
     title: 'macOS Auto Clicker',
     display_title: false,
-    commit_url: 'https://github.com/othyn/macos-auto-clicker/commit',
+    commit_url: 'https://github.com/mervap/macos-auto-clicker/commit',
     sections: {
       feat: ":star2: Features",
       fix: ":bug: Bug Fixes",
@@ -111,7 +111,7 @@ def build_and_zip(tag_prefix, is_beta)
 
   # https://docs.fastlane.tools/actions/set_github_release/#set_github_release
   set_github_release(
-    repository_name: "othyn/macos-auto-clicker",
+    repository_name: "mervap/macos-auto-clicker",
     api_bearer: ENV["GITHUB_TOKEN"],
     name: "#{tag_prefix} #{lane_context[SharedValues::RELEASE_NEXT_VERSION]}#{is_beta ? " (#{lane_context[SharedValues::RELEASE_LAST_TAG_HASH]})" : ""}",
     tag_name: "#{is_beta ? "beta/" : ""}v#{lane_context[SharedValues::RELEASE_NEXT_VERSION]}#{is_beta ? "/#{lane_context[SharedValues::RELEASE_LAST_TAG_HASH]}" : ""}",
